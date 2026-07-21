@@ -1,218 +1,405 @@
-// ===== STARS BACKGROUND =====
-function createStars() {
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 100; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animationDelay = Math.random() * 2 + 's';
-        star.style.width = Math.random() * 3 + 1 + 'px';
-        star.style.height = star.style.width;
-        starsContainer.appendChild(star);
+const scenes = [
+  {
+    id: 'entrance',
+    text: '🌟 Ayendri walks onto the stage, glowing with happiness...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character ayendri entering" id="ayendri" style="opacity:0;">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+      `;
+      setTimeout(() => {
+        document.getElementById('ayendri').style.opacity = '1';
+      }, 100);
     }
-}
-createStars();
-
-// ===== FLOATING HEARTS =====
-function createFloatingHearts() {
-    const container = document.querySelector('.floating-hearts');
-    if (!container) return;
-
-    setInterval(() => {
-        const heart = document.createElement('div');
-        heart.className = 'floating-heart';
-        heart.innerHTML = '❤️';
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
-        container.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 6000);
-    }, 800);
-}
-createFloatingHearts();
-
-// ===== SCENE NAVIGATION =====
-function showScene(sceneId) {
-    document.querySelectorAll('.scene').forEach(scene => {
-        scene.classList.remove('active');
-    });
-    document.getElementById(sceneId).classList.add('active');
-    window.scrollTo(0, 0);
-}
-
-function goToScene2() {
-    showScene('scene2');
-    document.getElementById('popupOverlay').style.display = 'flex';
-    document.getElementById('wishDisplay').style.display = 'none';
-}
-
-function goToScene3() {
-    showScene('scene3');
-}
-
-function goToScene4() {
-    showScene('scene4');
-}
-
-function goToScene5() {
-    showScene('scene5');
-    startFireworks();
-    startFinalHearts();
-}
-
-// ===== SCENE 2: WISH INPUT =====
-function submitWish() {
-    const wish = document.getElementById('wishInput').value.trim();
-    if (!wish) {
-        alert('Please write a wish first! 💕');
-        return;
+  },
+  {
+    id: 'lightCandles',
+    text: '🔥 The candles are lit one by one... Make a wish, Ayendri!',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character ayendri" id="ayendri">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+        <div class="cake-container">
+          <div class="candles">
+            <div class="candle" id="c1"></div>
+            <div class="candle" id="c2"></div>
+            <div class="candle" id="c3"></div>
+          </div>
+          <div class="cake"></div>
+        </div>
+      `;
+      setTimeout(() => {
+        document.getElementById('c1').classList.add('lit');
+        setTimeout(() => document.getElementById('c2').classList.add('lit'), 400);
+        setTimeout(() => document.getElementById('c3').classList.add('lit'), 800);
+      }, 500);
     }
+  },
+  {
+    id: 'makeWish',
+    text: '✨ Ayendri closes her eyes and makes a beautiful wish...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character ayendri" id="ayendri">
+          <div class="char-head" style="box-shadow: 0 0 30px rgba(255,215,0,0.5);"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+        <div class="cake-container">
+          <div class="candles">
+            <div class="candle lit" id="c1"></div>
+            <div class="candle lit" id="c2"></div>
+            <div class="candle lit" id="c3"></div>
+          </div>
+          <div class="cake"></div>
+          <div class="wish-stars show" id="wishStars">
+            <span class="star">⭐</span>
+            <span class="star">✨</span>
+            <span class="star">🌟</span>
+          </div>
+        </div>
+      `;
+    }
+  },
+  {
+    id: 'blowCandles',
+    text: '🌬️ She blows out the candles! The wish is set in the stars...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character ayendri" id="ayendri">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+        <div class="cake-container">
+          <div class="candles">
+            <div class="candle" id="c1"></div>
+            <div class="candle" id="c2"></div>
+            <div class="candle" id="c3"></div>
+          </div>
+          <div class="cake"></div>
+        </div>
+      `;
+      setTimeout(() => {
+        document.getElementById('c1').classList.remove('lit');
+        setTimeout(() => document.getElementById('c2').classList.remove('lit'), 200);
+        setTimeout(() => document.getElementById('c3').classList.remove('lit'), 400);
+      }, 800);
+    }
+  },
+  {
+    id: 'cutCake',
+    text: '🔪 Ayendri cuts the cake with joy and excitement!',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character ayendri" id="ayendri">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+          <div class="knife show" id="knife">🔪</div>
+        </div>
+        <div class="cake-container">
+          <div class="cake" id="mainCake"></div>
+        </div>
+      `;
+      setTimeout(() => {
+        const cake = document.getElementById('mainCake');
+        cake.style.transform = 'scale(0.95)';
+        setTimeout(() => { cake.style.transform = 'scale(1)'; }, 300);
+      }, 1000);
+    }
+  },
+  {
+    id: 'serveFather',
+    text: '👨‍🦳 First slice served to Father with love and respect...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 30%;"></div>
+        <div class="character father" id="father">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Father</div>
+          <div class="plate show" style="right: -60px;">🍰</div>
+        </div>
+        <div class="character ayendri" id="ayendri" style="margin-left: 40px;">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+      `;
+    }
+  },
+  {
+    id: 'serveMother',
+    text: '👩‍🦳 Second slice served to Mother with gratitude...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 70%;"></div>
+        <div class="character ayendri" id="ayendri">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+        <div class="character mother" id="mother" style="margin-left: 40px;">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Mother</div>
+          <div class="plate show" style="right: -60px;">🍰</div>
+        </div>
+      `;
+    }
+  },
+  {
+    id: 'serveYou',
+    text: '💝 A special slice just for you, her favorite person...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character you" id="You">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ravindu 💙</div>
+          <div class="plate show" style="right: -60px;">🍰</div>
+        </div>
+        <div class="character ayendri" id="ayendri" style="margin-left: 40px;">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+      `;
+    }
+  },
+  {
+    id: 'bouquet',
+    text: '🌹 You present a beautiful bouquet of Roses & Lavender...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div class="character you" id="you">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ravindu 💙</div>
+        </div>
+        <div class="character ayendri" id="ayendri" style="margin-left: 40px;">
+          <div class="char-head"></div>
+          <div class="char-body"></div>
+          <div class="char-legs">
+            <div class="char-leg"></div>
+            <div class="char-leg"></div>
+          </div>
+          <div class="char-label">Ayendri 👑</div>
+        </div>
+        <div class="bouquet show" id="bouquet" style="left: 50%; bottom: 100px; transform: translateX(-50%);">🌹💐🪻</div>
+      `;
+      setTimeout(() => { createConfetti(); }, 500);
+    }
+  },
+  {
+    id: 'hug',
+    text: '🤗 You both share the warmest, most loving hug ever...',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div style="display:flex; align-items:flex-end; gap: 5px;">
+          <div class="character you hugging" id="you">
+            <div class="char-head"></div>
+            <div class="char-body"></div>
+            <div class="char-legs">
+              <div class="char-leg"></div>
+              <div class="char-leg"></div>
+            </div>
+            <div class="char-label">Ravindu 💙</div>
+          </div>
+          <div class="character ayendri hugging" id="ayendri">
+            <div class="char-head"></div>
+            <div class="char-body"></div>
+            <div class="char-legs">
+              <div class="char-leg"></div>
+              <div class="char-leg"></div>
+            </div>
+            <div class="char-label">Ayendri 👑</div>
+          </div>
+        </div>
+        <div class="bouquet show" style="left: 50%; bottom: 90px; transform: translateX(-50%); font-size: 30px;">🌹💐🪻</div>
+      `;
+      setTimeout(() => {
+        createHeart();
+        setTimeout(createHeart, 400);
+        setTimeout(createHeart, 800);
+      }, 500);
+      setTimeout(() => { createConfetti(); }, 1000);
+    }
+  },
+  {
+    id: 'end',
+    text: 'Happy Birthday Ayendri! 🎂✨Wishing you endless love & joy! <br> mama oyata hemadamath adarei 😊 oyawa mata godak watinawa and oyage future path/plan walata subapathanwa !🤗 * Ravindu',
+    setup: (container) => {
+      container.innerHTML = `
+        <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
+        <div style="text-align:center; font-size: 60px; animation: fadeIn 1s ease;">🎂🎉🥳</div>
+        <div style="text-align:center; margin-top: 10px; color: #ffd700; font-family: 'Pacifico', cursive; font-size: 1.5rem;">
+          Happy Birthday<br>Ayendri! 🎈
+        </div>
+      `;
+      setInterval(createConfetti, 800);
+      setInterval(createHeart, 600);
+    }
+  }
+];
 
-    document.getElementById('popupOverlay').style.display = 'none';
-    document.getElementById('wishDisplay').style.display = 'flex';
-    document.getElementById('wishText').textContent = wish;
+let currentScene = -1;
+
+function initDots() {
+  const dotsContainer = document.getElementById('sceneDots');
+  dotsContainer.innerHTML = '';
+  scenes.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.id = `dot-${i}`;
+    dotsContainer.appendChild(dot);
+  });
 }
 
-// ===== SCENE 3: CANDLE LIGHTING =====
-let candlesLit = 0;
-
-function lightCandles() {
-    const flames = document.querySelectorAll('.flame');
-    const glows = document.querySelectorAll('.glow');
-    const lightBtn = document.getElementById('lightBtn');
-    const blowBtn = document.getElementById('blowBtn');
-
-    flames.forEach((flame, index) => {
-        setTimeout(() => {
-            flame.classList.add('lit');
-            glows[index].classList.add('lit');
-        }, index * 500);
-    });
-
-    setTimeout(() => {
-        lightBtn.style.display = 'none';
-        blowBtn.style.display = 'inline-block';
-        blowBtn.style.animation = 'fadeIn 1s ease-out forwards';
-    }, 2000);
+function updateDots() {
+  scenes.forEach((_, i) => {
+    const dot = document.getElementById(`dot-${i}`);
+    dot.classList.remove('active', 'completed');
+    if (i < currentScene) dot.classList.add('completed');
+    else if (i === currentScene) dot.classList.add('active');
+  });
 }
 
-// ===== SCENE 4: CAKE SLICING =====
-function sliceCake() {
-    const knife = document.getElementById('knife');
-    const cake = document.getElementById('cake');
-    const sliceBtn = document.getElementById('sliceBtn');
-    const slicesContainer = document.getElementById('slicesContainer');
-    const serveBtn = document.getElementById('serveBtn');
-
-    knife.classList.add('cutting');
-
-    setTimeout(() => {
-        cake.classList.add('sliced');
-        sliceBtn.style.display = 'none';
-        slicesContainer.style.display = 'flex';
-        serveBtn.style.display = 'inline-block';
-        serveBtn.style.animation = 'fadeIn 1s ease-out forwards';
-    }, 1000);
+function updateProgress() {
+  const bar = document.getElementById('progressBar');
+  const pct = ((currentScene + 1) / scenes.length) * 100;
+  bar.style.width = pct + '%';
 }
 
-function serveSlices() {
-    const serveBtn = document.getElementById('serveBtn');
-    const finalBtn = document.getElementById('finalBtn');
-    const characters = document.querySelectorAll('.character');
+function renderScene(index) {
+  const container = document.getElementById('sceneVisual');
+  const text = document.getElementById('sceneText');
 
-    serveBtn.style.display = 'none';
+  if (index < 0 || index >= scenes.length) return;
 
-    // Animate each character getting their slice
-    characters.forEach((char, index) => {
-        setTimeout(() => {
-            char.classList.add('served');
-            // Create a mini cake slice that flies to the character
-            createFlyingSlice(char, index);
-        }, index * 600);
-    });
+  currentScene = index;
+  text.textContent = scenes[index].text;
+  scenes[index].setup(container);
+  updateDots();
+  updateProgress();
 
-    setTimeout(() => {
-        finalBtn.style.display = 'inline-block';
-        finalBtn.style.animation = 'fadeIn 1s ease-out forwards';
-    }, characters.length * 600 + 500);
+  document.getElementById('nextBtn').disabled = (index >= scenes.length - 1);
+  document.getElementById('startBtn').textContent = index === 0 ? '🎊 Start Celebration' : '▶️ Continue';
 }
 
-function createFlyingSlice(character, index) {
-    const slice = document.createElement('div');
-    slice.style.cssText = `
-        position: fixed;
-        width: 30px;
-        height: 25px;
-        background: linear-gradient(to bottom, #8B4513, #D2691E);
-        border-radius: 3px;
-        z-index: 1000;
-        left: 50%;
-        top: 50%;
-        transition: all 1s ease-in-out;
-    `;
-    document.body.appendChild(slice);
-
-    const rect = character.getBoundingClientRect();
-
-    setTimeout(() => {
-        slice.style.left = rect.left + rect.width/2 - 15 + 'px';
-        slice.style.top = rect.top + 'px';
-        slice.style.transform = 'scale(0.5)';
-        slice.style.opacity = '0';
-    }, 50);
-
-    setTimeout(() => slice.remove(), 1100);
+function startCelebration() {
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('nextBtn').disabled = false;
+  renderScene(0);
 }
 
-// ===== SCENE 5: FIREWORKS =====
-function startFireworks() {
-    const container = document.getElementById('fireworks');
-    const colors = ['#ff6b9d', '#f7c531', '#6bcb77', '#4d96ff', '#ff6b35', '#fff'];
-
-    setInterval(() => {
-        const firework = document.createElement('div');
-        firework.className = 'firework';
-        firework.style.left = Math.random() * 100 + '%';
-        firework.style.top = Math.random() * 60 + '%';
-        firework.style.background = colors[Math.floor(Math.random() * colors.length)];
-        firework.style.boxShadow = `0 0 10px ${firework.style.background}`;
-        container.appendChild(firework);
-
-        setTimeout(() => firework.remove(), 1000);
-    }, 800);
+function nextScene() {
+  if (currentScene < scenes.length - 1) {
+    renderScene(currentScene + 1);
+  }
 }
 
-function startFinalHearts() {
-    const container = document.querySelector('.floating-hearts-final');
-    if (!container) return;
-
-    setInterval(() => {
-        const heart = document.createElement('div');
-        heart.className = 'floating-heart';
-        heart.innerHTML = ['❤️', '💕', '💖', '💗', '💝'][Math.floor(Math.random() * 5)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
-        heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
-        container.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 8000);
-    }, 500);
+function resetCelebration() {
+  currentScene = -1;
+  document.getElementById('sceneVisual').innerHTML = '';
+  document.getElementById('sceneText').textContent = 'Press "Start Celebration" to begin! 🎉';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('startBtn').textContent = '🎊 Start Celebration';
+  initDots();
 }
 
-// ===== REPLACE NAME PLACEHOLDER =====
-// User should replace [HER NAME] with actual name in HTML file
-// Or use this function if you want to make it dynamic:
-function setHerName(name) {
-    document.querySelectorAll('.name-placeholder').forEach(el => {
-        el.textContent = name;
-    });
+function createConfetti() {
+  const widget = document.getElementById('birthdayWidget');
+  const colors = ['#ff6b9d', '#9370db', '#ffd700', '#4ecdc4', '#ff8a65', '#81c784'];
+  for (let i = 0; i < 12; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.top = '-10px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    widget.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
 }
 
-// Example: setHerName('Her Name');
-// Uncomment the line above and replace 'Her Name' with her actual name
+function createHeart() {
+  const widget = document.getElementById('birthdayWidget');
+  const heart = document.createElement('div');
+  heart.className = 'heart-float';
+  heart.textContent = ['❤️', '💖', '💕', '💗', '💝'][Math.floor(Math.random() * 5)];
+  heart.style.left = (30 + Math.random() * 40) + '%';
+  heart.style.bottom = '150px';
+  heart.style.fontSize = (20 + Math.random() * 15) + 'px';
+  widget.appendChild(heart);
+  setTimeout(() => heart.remove(), 2500);
+}
 
-// ===== AUTO-PLAY MUSIC (optional) =====
-// document.getElementById('bgMusic').volume = 0.3;
-// document.getElementById('bgMusic').play();
+// Initialize
+initDots();
