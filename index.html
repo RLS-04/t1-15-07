@@ -1,266 +1,35 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday ❤️</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Ayendri!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Stars -->
-    <div id="stars"></div>
+  <div class="birthday-widget" id="birthdayWidget">
+    <div class="stage-title">🎂 Happy Birthday Ayendri! 🎂</div>
+    <div class="subtitle">July 22nd — A Day to Remember ✨</div>
 
-    <!-- SCENE 1: First Crush Reveal -->
-    <div id="scene1" class="scene active">
-        <div class="heart-container">
-            <div class="heart"></div>
-            <div class="heart"></div>
-            <div class="heart"></div>
-        </div>
-        <div class="message-box">
-            <h1 class="typing-text">Happy Birthday <span class="name-placeholder">Sandhushi</span> ❤️</h1>
-            <p class="reveal-text">You are my <span class="highlight">First Crush</span>... 💕</p>
-            <p class="sub-text">The one who made my heart skip a beat...</p>
-            <button class="btn-next" onclick="goToScene2()">Continue ➜</button>
-        </div>
-        <div class="floating-hearts"></div>
+    <div class="scene-display" id="sceneDisplay">
+      <div class="scene-visual" id="sceneVisual"></div>
+      <div class="scene-text" id="sceneText">Press "Start Celebration" to begin! 🎉</div>
     </div>
 
-    <!-- SCENE 2: Birthday Wish Input (Popup) -->
-    <div id="scene2" class="scene">
-        <div class="popup-overlay" id="popupOverlay">
-            <div class="popup-box">
-                <div class="popup-icon">🎂</div>
-                <h2>22nd Birthday Wish</h2>
-                <p>Type your birthday wish, <span class="name-placeholder">Sandhushi</span>:</p>
-                <textarea id="wishInput" placeholder="Enter your wish here..."></textarea>
-                <button class="btn-submit" onclick="submitWish()">Send Wish ✨</button>
-            </div>
-        </div>
-        <div class="wish-display" id="wishDisplay" style="display:none;">
-            <div class="wish-card">
-                <h3>✨ Your Wish ✨</h3>
-                <p id="wishText"></p>
-                <button class="btn-next" onclick="goToScene3()">Light the Candle 🕯️</button>
-            </div>
-        </div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <!-- SCENE 3: Candle Lighting -->
-    <div id="scene3" class="scene">
-        <div class="dark-room">
-            <div class="candle-container">
-                <div class="candle">
-                    <div class="wax"></div>
-                    <div class="flame" id="flame"></div>
-                    <div class="glow"></div>
-                </div>
-                <div class="candle">
-                    <div class="wax"></div>
-                    <div class="flame" id="flame2"></div>
-                    <div class="glow"></div>
-                </div>
-                <div class="candle">
-                    <div class="wax"></div>
-                    <div class="flame" id="flame3"></div>
-                    <div class="glow"></div>
-                </div>
-            </div>
-            <p class="candle-text">Click to light the candles...</p>
-            <button class="btn-light" id="lightBtn" onclick="lightCandles()">🔥 Light Candles</button>
-            <button class="btn-next" id="blowBtn" style="display:none;" onclick="goToScene4()">💨 Blow Out Candles</button>
-        </div>
+    <div class="scene-dots" id="sceneDots"></div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="startBtn" onclick="startCelebration()">🎊 Start Celebration</button>
+      <button class="btn btn-secondary" id="nextBtn" onclick="nextScene()" disabled>Next Scene ➡️</button>
+      <button class="btn btn-secondary" id="resetBtn" onclick="resetCelebration()">🔄 Reset</button>
     </div>
+  </div>
 
-    <!-- SCENE 4: Cake Slicing -->
-    <div id="scene4" class="scene">
-        <div class="party-room">
-            <h2 class="scene-title">🎉 Let's Cut the Cake! 🎉</h2>
-
-            <div class="cake-wrapper">
-                <div class="cake" id="cake">
-                    <div class="cake-base">
-                        <div class="cake-layer layer1"></div>
-                        <div class="cake-layer layer2"></div>
-                        <div class="cake-layer layer3"></div>
-                        <div class="frosting"></div>
-                        <div class="sprinkles">
-                            <span></span><span></span><span></span><span></span><span></span>
-                            <span></span><span></span><span></span><span></span><span></span>
-                        </div>
-                    </div>
-                    <div class="candles-on-cake">
-                        <div class="mini-flame"></div>
-                        <div class="mini-flame"></div>
-                        <div class="mini-flame"></div>
-                    </div>
-                </div>
-                <div class="knife" id="knife">🔪</div>
-            </div>
-
-            <div class="characters-row">
-                <!-- Father (passed away - photo frame) -->
-                <div class="character" id="char-father">
-                    <div class="char-body father-char">
-                        <div class="char-head">
-                            <div class="char-eyes">◕ ◕</div>
-                            <div class="char-smile">‿</div>
-                            <div class="halo">👼</div>
-                        </div>
-                        <div class="char-body-shape"></div>
-                    </div><br><br>
-                    <div class="photo-frame">
-                        <div class="frame-inner">👨</div>
-                        <div class="frame-label"><p>Dad ❤️</p></div>
-                        <div class="angel-wings">🕊️</div>
-                    </div>
-                </div>
-
-                <!-- Mother -->
-                <div class="character" id="char-mother">
-                    <div class="char-body mother-char">
-                        <div class="char-head">
-                            <div class="hair mother-hair"></div>
-                            <div class="char-eyes">◕ ◕</div>
-                            <div class="char-smile">‿</div>
-                        </div>
-                        <div class="char-body-shape"></div>
-                        <div class="char-dress"></div>
-                    </div>
-                    <div class="char-label">Mom</div>
-                </div>
-
-                <!-- Older Brother -->
-                <div class="character" id="char-brother">
-                    <div class="char-body brother-char">
-                        <div class="char-head">
-                            <div class="hair brother-hair"></div>
-                            <div class="char-eyes">◕ ◕</div>
-                            <div class="char-smile">‿</div>
-                        </div>
-                        <div class="char-body-shape"></div>
-                        <div class="char-shirt"></div>
-                    </div>
-                    <div class="char-label">Brother</div>
-                </div>
-
-                <!-- Birthday Girl -->
-                <div class="character" id="char-birthdaygirl">
-                    <div class="char-body girl-char">
-                        <div class="char-head">
-                            <div class="hair girl-hair"></div>
-                            <div class="char-eyes">◕ ◕</div>
-                            <div class="char-smile">‿</div>
-                            <div class="blush"></div>
-                        </div>
-                        <div class="char-body-shape"></div>
-                        <div class="char-dress pink-dress"></div>
-                        <div class="crown">👑</div></br>
-                    </div>
-                    <div class="char-label"><span class="name-placeholder">Sandhushi</span> 🎂</div>
-                </div>
-
-                <!-- Kitty (Puusa) -->
-                <div class="character" id="char-kitty">
-                    <div class="char-body kitty-char">
-                        <div class="kitty-head">
-                            <div class="kitty-ears">
-                                <div class="ear"></div>
-                                <div class="ear"></div>
-                            </div>
-                            <div class="kitty-eyes">◕ ◕</div>
-                            <div class="kitty-nose">▾</div>
-                            <div class="kitty-mouth">ω</div>
-                            <div class="whiskers">
-                                <span></span><span></span><span></span>
-                            </div>
-                        </div>
-                        <div class="kitty-body"></div>
-                        <div class="kitty-tail"></div>
-                    </div>
-                    <div class="char-label">kitty 🐱</div>
-                </div>
-
-                <!-- You (Sender) -->
-                <div class="character" id="char-you">
-                    <div class="char-body you-char">
-                        <div class="char-head">
-                            <div class="hair you-hair"></div>
-                            <div class="char-eyes">◕ ◕</div>
-                            <div class="char-smile">‿</div>
-                        </div>
-                        <div class="char-body-shape"></div>
-                        <div class="char-shirt blue-shirt"></div>
-                        <div class="heart-float">💗</div>
-                    </div>
-                    <div class="char-label">Me ❤️</div>
-                </div>
-            </div>
-
-            <div class="slice-controls">
-                <button class="btn-slice" id="sliceBtn" onclick="sliceCake()">🍰 Cut Cake</button>
-            </div>
-
-            <div class="slices-container" id="slicesContainer" style="display:none;">
-                <div class="slice" id="slice1">
-                    <div class="slice-cake"></div>
-                    <div class="slice-label">For Dad 👼</div>
-                </div>
-                <div class="slice" id="slice2">
-                    <div class="slice-cake"></div>
-                    <div class="slice-label">For Mom</div>
-                </div>
-                <div class="slice" id="slice3">
-                    <div class="slice-cake"></div>
-                    <div class="slice-label">For Brother</div>
-                </div>
-                <div class="slice" id="slice4">
-                    <div class="slice-cake"></div>
-                    <div class="slice-label">For <span class="name-placeholder">Sandhushi</span></div>
-                </div>
-                <div class="slice" id="slice5">
-                    <div class="slice-cake"></div>
-                    <div class="slice-label">For kitty 🐱</div>
-                </div>
-                <div class="slice" id="slice6">
-                    <div class="slice-cake"></div>
-                    <div class="slice-label">For Me ❤️</div>
-                </div>
-            </div>
-
-            <button class="btn-next" id="serveBtn" style="display:none;" onclick="serveSlices()">🎁 Serve Everyone</button>
-            <button class="btn-next" id="finalBtn" style="display:none;" onclick="goToScene5()">✨ Final Moment ✨</button>
-        </div>
-    </div>
-
-    <!-- SCENE 5: Final - Family Together -->
-    <div id="scene5" class="scene">
-        <div class="final-scene">
-            <div class="fireworks" id="fireworks"></div>
-            <div class="final-message">
-                <h1 class="glow-text">Happy 22nd Birthday!</h1>
-                <h2 class="name-glow"><span class="name-placeholder">Sandhushi</span></h2>
-                <div class="family-photo">
-                    <div class="together-char father-together">👨‍🦳<span class="halo-small">👼</span></div>
-                    <div class="together-char mother-together">👩</div>
-                    <div class="together-char brother-together">👦</div>
-                    <div class="together-char girl-together">👸<span class="crown-small">👑</span></div>
-                    <div class="together-char kitty-together">🐱</div>
-                    <div class="together-char you-together">🧑<span class="heart-small">💕</span></div>
-                </div>
-                <p class="final-wish">May all your dreams come true... ✨</p>
-                <p class="final-wish">Your family is always with you... ❤️</p>
-                <p class="from-text">from Ravindu To sandhushi 💕</p>
-                <div class="floating-hearts-final"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Background Music (optional) -->
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
