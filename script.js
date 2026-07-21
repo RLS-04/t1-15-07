@@ -198,7 +198,7 @@ const scenes = [
   },
   {
     id: 'serveYou',
-    text: '💝 A special slice just for you, her favorite person...',
+    text: '💝 A slice just for Ravindu see more...',
     setup: (container) => {
       container.innerHTML = `
         <div class="spotlight active" style="left: 50%; transform: translateX(-50%);"></div>
